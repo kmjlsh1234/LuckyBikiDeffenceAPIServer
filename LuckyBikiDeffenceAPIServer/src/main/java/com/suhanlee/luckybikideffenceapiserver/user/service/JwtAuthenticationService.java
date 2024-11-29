@@ -2,7 +2,6 @@ package com.suhanlee.luckybikideffenceapiserver.user.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.suhanlee.luckybikideffenceapiserver.config.security.constants.JwtPropertes;
 import com.suhanlee.luckybikideffenceapiserver.user.model.JwtRecord;
 import com.suhanlee.luckybikideffenceapiserver.user.repository.JwtRecordRepository;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
