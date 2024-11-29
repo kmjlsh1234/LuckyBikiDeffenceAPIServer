@@ -17,6 +17,7 @@ CREATE TABLE `jwt_record`
 (
     `record_no`       bigint    NOT NULL AUTO_INCREMENT COMMENT '기록번호',
     `user_id`        bigint    NOT NULL COMMENT '유저 고유번호',
+    `refresh_token_id` bigint    NOT NULL COMMENT '리프레쉬토큰고유번호',
     `ip_address`      varchar(20)        DEFAULT NULL COMMENT '아이피주소',
     `expire_datetime` datetime  NOT NULL COMMENT '만료일시',
     `logout_at`       timestamp NULL     DEFAULT NULL COMMENT '로그아웃시각',
@@ -25,3 +26,15 @@ CREATE TABLE `jwt_record`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT ='jwt 기록';
+
+CREATE TABLE `refresh_token`
+(
+    `id`              bigint       NOT NULL AUTO_INCREMENT COMMENT '리프레쉬토큰 고유번호',
+    `user_id`         bigint       NOT NULL COMMENT '유저고유번호',
+    `refresh_token`   varchar(100) NOT NULL COMMENT '리프레쉬토큰',
+    `expire_datetime` datetime     NOT NULL COMMENT '만료일시',
+    `created_at`      timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='리프레시 토큰';

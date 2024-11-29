@@ -6,7 +6,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
-import com.suhanlee.luckybikideffenceapiserver.config.security.constants.JwtPropertes;
+import com.suhanlee.luckybikideffenceapiserver.config.security.constants.JwtProperties;
 import com.suhanlee.luckybikideffenceapiserver.user.service.JwtAuthenticationService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -47,7 +47,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                                     HttpServletResponse response,
                                     FilterChain chain) throws IOException, ServletException {
         //권한 헤더(jwt) 취득
-        String header = request.getHeader(JwtPropertes.HEADER_AUTH);
+        String header = request.getHeader(JwtProperties.HEADER_AUTH);
         String requestUrl = request.getRequestURI();
 
         //JWT없거나 검사할 필요가 없으면 스킵
@@ -66,7 +66,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     }
 
     private Authentication getUserAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String token = request.getHeader(JwtPropertes.HEADER_AUTH);
+        String token = request.getHeader(JwtProperties.HEADER_AUTH);
 
         //parse token and check validate
         DecodedJWT decodedJWT;
@@ -84,7 +84,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         //토큰 발행번호로 블랙리스트 조회
 
         String subject = new String(DatatypeConverter.parseHexBinary(converted));
-        String[] subArray = subject.split(JwtPropertes.SPLITTER);
+        String[] subArray = subject.split(JwtProperties.SPLITTER);
 
         if(subArray[0] != null) {
             long userId = Long.parseLong(subArray[1]);

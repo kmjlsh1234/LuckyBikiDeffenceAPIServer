@@ -1,13 +1,13 @@
 package com.suhanlee.luckybikideffenceapiserver.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.suhanlee.luckybikideffenceapiserver.config.security.constants.JwtPropertes;
+import com.suhanlee.luckybikideffenceapiserver.config.security.constants.JwtProperties;
 import com.suhanlee.luckybikideffenceapiserver.user.model.LoginViewModel;
+import com.suhanlee.luckybikideffenceapiserver.user.model.RefreshToken;
 import com.suhanlee.luckybikideffenceapiserver.user.model.UserSimple;
 import com.suhanlee.luckybikideffenceapiserver.user.service.JwtAuthenticationService;
 import com.suhanlee.luckybikideffenceapiserver.util.WebUtil;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -75,8 +75,15 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         String realIp = webUtil.getClientIp(request);
 
+        RefreshToken refreshToken = jwtAuthenticationService.issuingRefreshToken(userId);
+
         //creat JWT Token
-        response.addHeader(JwtPropertes.HEADER_AUTH, jwtAuthenticationService.createJwtToken(principal.getEmail(), principal.getUserId(), realIp));
+        response.addHeader(JwtProperties.HEADER_AUTH,
+                jwtAuthenticationService.createJwtToken(principal.getEmail(), userId, realIp, refreshToken.getId()));
+
+        if (refreshToken.getRefreshToken() != null) {
+            response.addHeader(JwtProperties.REFRESH_HEADER_STRING, refreshToken.getRefreshToken());  // refreshToken
+        }
         try{
             ObjectMapper mapper = new ObjectMapper();
             String result = mapper.writeValueAsString(UserSimple.builder()
