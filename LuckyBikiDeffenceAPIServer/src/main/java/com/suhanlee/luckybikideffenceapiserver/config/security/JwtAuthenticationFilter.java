@@ -39,7 +39,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.authenticationManager = authenticationManager;
         this.webUtil = webUtil;
         this.jwtAuthenticationService = jwtAuthenticationService;
-        this.setFilterProcessesUrl("/login");
+        this.setFilterProcessesUrl("auth/login");
     }
 
     //로그인 시도

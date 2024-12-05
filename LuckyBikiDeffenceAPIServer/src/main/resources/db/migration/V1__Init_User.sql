@@ -1,4 +1,4 @@
-CREATE TABLE user
+CREATE TABLE users
 (
     user_id    BIGINT AUTO_INCREMENT   NOT NULL COMMENT '유저 고유번호',
     status     TINYINT NOT NULL COMMENT '상태',

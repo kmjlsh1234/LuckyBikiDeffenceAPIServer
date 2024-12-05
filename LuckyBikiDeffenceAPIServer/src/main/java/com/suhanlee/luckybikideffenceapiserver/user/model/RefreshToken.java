@@ -11,13 +11,13 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-@Data
-@EntityListeners(AuditingEntityListener.class)
 @Entity
-@Builder
-@Table(name= "refresh_token")
-@NoArgsConstructor
+@Table(name = "refresh_token")
 @AllArgsConstructor
+@NoArgsConstructor
+@Data
+@Builder
+@EntityListeners(AuditingEntityListener.class)
 public class RefreshToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
