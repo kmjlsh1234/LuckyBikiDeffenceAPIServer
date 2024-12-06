@@ -38,3 +38,15 @@ CREATE TABLE `refresh_token`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT ='리프레시 토큰';
+
+CREATE TABLE `gold`
+(
+    `id`         bigint    NOT NULL AUTO_INCREMENT COMMENT '골드고유번호',
+    `user_id`    bigint    NOT NULL COMMENT '유저고유번호',
+    `amount`     int       NOT NULL DEFAULT 0 COMMENT '금액',
+    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='골드';

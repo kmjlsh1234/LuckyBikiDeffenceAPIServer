@@ -1,5 +1,7 @@
 package com.suhanlee.luckybikideffenceapiserver.user.service;
 
+import com.suhanlee.luckybikideffenceapiserver.currency.model.Gold;
+import com.suhanlee.luckybikideffenceapiserver.currency.repository.GoldRepository;
 import com.suhanlee.luckybikideffenceapiserver.user.constants.UserStatus;
 import com.suhanlee.luckybikideffenceapiserver.user.model.Users;
 import com.suhanlee.luckybikideffenceapiserver.user.param.UserJoinParam;
@@ -17,16 +19,23 @@ import java.time.LocalDateTime;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final GoldRepository goldRepository;
 
     //회원가입
     @Transactional(rollbackFor = Exception.class)
     public void joinUser(UserJoinParam userJoinParam) {
         checkJoinParameter(userJoinParam);
-        userRepository.save(Users.builder()
+        Users user = userRepository.save(Users.builder()
                 .status(UserStatus.LOGOUT)
                 .email(userJoinParam.getEmail())
                 .password(userJoinParam.getPassword())
                 .nickname(userJoinParam.getNickname())
+                .build());
+
+        //회원가입 시 재화 테이블에 등록
+        goldRepository.save(Gold.builder()
+                .userId(user.getUserId())
+                .amount(0)
                 .build());
     }
 
