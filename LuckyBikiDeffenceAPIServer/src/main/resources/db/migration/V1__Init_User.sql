@@ -62,3 +62,18 @@ CREATE TABLE `profile`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT ='프로필';
+
+CREATE TABLE `gold_record`
+(
+    `id`             bigint       NOT NULL AUTO_INCREMENT COMMENT '골드기록 고유번호',
+    `user_id`        bigint       NOT NULL COMMENT '유저고유번호',
+    `change_type`    tinyint      NOT NULL COMMENT '변경타입(add, use)',
+    `change_gold`    int          NOT NULL COMMENT '변경골드',
+    `result_gold`    int          NOT NULL COMMENT '결과골드',
+    `change_desc`    varchar(255) NULL COMMENT '변경설명',
+    `idempotent_key` varchar(255) NOT NULL COMMENT '멱등키',
+    `created_at`     timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='골드기록';

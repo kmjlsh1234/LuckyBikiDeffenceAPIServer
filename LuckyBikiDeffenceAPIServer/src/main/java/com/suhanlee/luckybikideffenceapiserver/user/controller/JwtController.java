@@ -15,7 +15,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@RequestMapping("/v1/api")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class JwtController {
 

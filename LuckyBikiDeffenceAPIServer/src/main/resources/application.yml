@@ -17,6 +17,9 @@ spring:
     baselineOnMigrate: true
     locations: classpath:db/migration/local,classpath:db/callback
     validateMigrationNaming: true
+redis:
+  host: 127.0.0.1
+  port: 6379
 jwt:
   secret: mysecret
 server:
