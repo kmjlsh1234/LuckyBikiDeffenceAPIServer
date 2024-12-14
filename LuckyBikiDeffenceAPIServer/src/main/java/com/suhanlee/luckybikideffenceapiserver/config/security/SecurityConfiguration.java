@@ -45,7 +45,7 @@ public class SecurityConfiguration {
                 .addFilter(new JwtAuthorizationFilter((authenticationManagerBuilder.getObject()), secret, jwtAuthenticationService));
         http.authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers(
-                        "/","/api/test/","auth/login", "/v1/api/user/join"
+                        "/","test/","auth/login", "/v1/api/user/join"
                 ).permitAll()
                 .requestMatchers(HttpMethod.POST, "auth/login").permitAll()
                 .anyRequest().authenticated())

@@ -15,7 +15,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class JwtController {
 
@@ -23,7 +23,7 @@ public class JwtController {
     private final JwtAuthenticationService jwtAuthenticationService;
 
     //refresh token 발급
-    @PostMapping("/token/refresh")
+    @PostMapping("/v1/token/refresh")
     public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenParam refreshTokenParam,
                                           @RequestHeader(name = "Authorization") String authToken,
                                           HttpServletRequest request,

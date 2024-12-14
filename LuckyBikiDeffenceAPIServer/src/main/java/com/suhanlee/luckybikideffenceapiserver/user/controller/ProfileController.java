@@ -11,28 +11,28 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class ProfileController {
 
     private final ProfileService profileService;
 
     //프로필 조회
-    @GetMapping("/profile")
+    @GetMapping("/v1/profile")
     public ResponseEntity<?> getProfile(@AuthenticationPrincipal UserPrincipal userPrincipal) {
         long userId = userPrincipal.getUserId();
         return ResponseEntity.ok(profileService.getProfile(userId));
     }
 
     //프로필 추가
-    @PostMapping("/profile")
+    @PostMapping("/v1/profile")
     public ResponseEntity<?> addProfile(@AuthenticationPrincipal UserPrincipal userPrincipal){
         long userId = userPrincipal.getUserId();
         return ResponseEntity.ok(profileService.addProfile(userId));
     }
 
     //프로필 수정
-    @PutMapping("/profile")
+    @PutMapping("/v1/profile")
     public ResponseEntity<?> modProfile(@RequestBody ProfileModParam profileModParam, @AuthenticationPrincipal UserPrincipal userPrincipal){
         long userId = userPrincipal.getUserId();
         profileModParam.setUserId(userId);
