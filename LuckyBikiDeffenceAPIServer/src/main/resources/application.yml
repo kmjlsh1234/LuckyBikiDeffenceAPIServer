@@ -6,7 +6,7 @@ spring:
     username: root
     password: suhan1234
     hikari:
-      jdbc-url: jdbc:mysql://localhost:3306/mywebserver
+      jdbc-url: jdbc:mysql://localhost:3306/myapiserver
   jpa:
     properties:
       hibernate:

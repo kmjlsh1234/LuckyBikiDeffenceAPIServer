@@ -1,18 +1,16 @@
-version: '3.7'
-
 services:
-  mysql-db:
-    image: mysql:8.4.0
-    container_name: local_mysql85
-    volumes:
-      - .docker/setup.sql:/docker-entrypoint-initdb.d/setup.sql
-      - ~/container/mysql84:/var/lib/mysql
+  mysql:
+    image: mysql:8.0.39
     ports:
-      - 3306:3306
-    command: --mysql-native-password=ON
-    restart: always
+      - "3306:3306"
+    volumes:
+      - ./db/mysql/init:/docker-entrypoint-initdb.d
+      - ./db/mysql/data:/var/lib/mysql
     environment:
-      MYSQL_DATABASE: mywebserver
       MYSQL_ROOT_PASSWORD: suhan1234
-      MYSQL_USER: root
-      MYSQL_PASSWORD: suhan1234
+      MYSQL_DATABASE: myapiserver
+  redis:
+    image: redis:7.0
+    ports:
+      - "6379:6379"
+
