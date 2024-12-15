@@ -1,6 +1,7 @@
 package com.suhanlee.luckybikideffenceapiserver.config.security;
 
 import com.suhanlee.luckybikideffenceapiserver.user.service.JwtAuthenticationService;
+import com.suhanlee.luckybikideffenceapiserver.user.service.UserLoginAfterService;
 import com.suhanlee.luckybikideffenceapiserver.util.WebUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +29,15 @@ public class SecurityConfiguration {
     private String secret;
 
     private final UserDetailsService userDetailsService;
-
+    private final UserLoginAfterService userLoginAfterService;
     private final JwtAuthenticationService jwtAuthenticationService;
     private final WebUtil webUtil;
 
-    public SecurityConfiguration(JwtAuthenticationService jwtAuthenticationService, WebUtil webUtil, UserDetailsService userDetailsService) {
+    public SecurityConfiguration(JwtAuthenticationService jwtAuthenticationService, WebUtil webUtil, UserDetailsService userDetailsService, UserLoginAfterService userLoginAfterService) {
         this.jwtAuthenticationService = jwtAuthenticationService;
         this.webUtil = webUtil;
         this.userDetailsService = userDetailsService;
+        this.userLoginAfterService = userLoginAfterService;
     }
 
     @Bean
@@ -47,7 +49,7 @@ public class SecurityConfiguration {
         http
                 .csrf(CsrfConfigurer::disable)
                 .sessionManagement(Configurer -> Configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilter(new JwtAuthenticationFilter((authenticationManagerBuilder.getObject()), jwtAuthenticationService, webUtil))
+                .addFilter(new JwtAuthenticationFilter((authenticationManagerBuilder.getObject()), userLoginAfterService, jwtAuthenticationService,  webUtil))
                 .addFilter(new JwtAuthorizationFilter((authenticationManagerBuilder.getObject()), secret, jwtAuthenticationService));
         http.authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers(

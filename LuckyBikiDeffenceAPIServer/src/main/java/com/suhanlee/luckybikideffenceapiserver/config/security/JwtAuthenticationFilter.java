@@ -4,11 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.suhanlee.luckybikideffenceapiserver.config.error.ErrorCode;
 import com.suhanlee.luckybikideffenceapiserver.config.error.exception.RestException;
 import com.suhanlee.luckybikideffenceapiserver.config.security.constants.JwtProperties;
-import com.suhanlee.luckybikideffenceapiserver.user.model.LoginAddInfo;
 import com.suhanlee.luckybikideffenceapiserver.user.model.LoginViewModel;
 import com.suhanlee.luckybikideffenceapiserver.user.model.RefreshToken;
 import com.suhanlee.luckybikideffenceapiserver.user.model.UserSimple;
 import com.suhanlee.luckybikideffenceapiserver.user.service.JwtAuthenticationService;
+import com.suhanlee.luckybikideffenceapiserver.user.service.UserLoginAfterService;
 import com.suhanlee.luckybikideffenceapiserver.util.WebUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,10 +35,12 @@ import java.nio.charset.StandardCharsets;
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final JwtAuthenticationService jwtAuthenticationService;
+    private final UserLoginAfterService userLoginAfterService;
     private final WebUtil webUtil;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtAuthenticationService jwtAuthenticationService, WebUtil webUtil) {
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, UserLoginAfterService userLoginAfterService, JwtAuthenticationService jwtAuthenticationService, WebUtil webUtil) {
         this.authenticationManager = authenticationManager;
+        this.userLoginAfterService = userLoginAfterService;
         this.webUtil = webUtil;
         this.jwtAuthenticationService = jwtAuthenticationService;
         this.setFilterProcessesUrl("/auth/login");
@@ -77,7 +79,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                          Authentication authResult) {
         UserPrincipal principal = (UserPrincipal) authResult.getPrincipal();
         long userId = principal.getUserId();
-
+        userLoginAfterService.updateUserLoginStatus(userId);
         String realIp = webUtil.getClientIp(request);
 
         RefreshToken refreshToken = jwtAuthenticationService.issuingRefreshToken(userId);

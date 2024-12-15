@@ -1,6 +1,5 @@
 package com.suhanlee.luckybikideffenceapiserver.config.security;
 
-import com.suhanlee.luckybikideffenceapiserver.user.model.LoginAddInfo;
 import lombok.Getter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
@@ -10,11 +9,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 @Getter
 public class CustomAuthenticationToken extends UsernamePasswordAuthenticationToken {
 
-    private final LoginAddInfo loginAddInfo;
 
-    public CustomAuthenticationToken(Object principal, Object credentials, LoginAddInfo loginAddInfo) {
+    public CustomAuthenticationToken(Object principal, Object credentials) {
         super(principal, credentials);
-        this.loginAddInfo = loginAddInfo;
         super.setAuthenticated(false);
     }
 }

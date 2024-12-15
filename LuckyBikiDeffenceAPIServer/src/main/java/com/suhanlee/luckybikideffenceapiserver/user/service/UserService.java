@@ -27,6 +27,8 @@ public class UserService {
     @Transactional(rollbackFor = Exception.class)
     public void joinUser(UserJoinParam userJoinParam) {
         checkJoinParameter(userJoinParam);
+        log.info(userJoinParam.getEmail());
+        log.info(userJoinParam.getPassword());
         Users user = userRepository.save(Users.builder()
                 .status(UserStatus.LOGOUT)
                 .email(userJoinParam.getEmail())
