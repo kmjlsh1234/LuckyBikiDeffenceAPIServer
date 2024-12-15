@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 public class JwtRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "record_no")
     private long recordNo;
 
     @Column(name = "user_id")

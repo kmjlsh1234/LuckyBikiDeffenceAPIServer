@@ -9,5 +9,6 @@ import lombok.Setter;
 public class ProfileModParam {
     @JsonIgnore
     private long userId;
+    private String nickname;
     private String image;
 }

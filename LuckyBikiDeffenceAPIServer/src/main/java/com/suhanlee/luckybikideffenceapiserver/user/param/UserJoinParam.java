@@ -6,5 +6,4 @@ import lombok.Getter;
 public class UserJoinParam {
     private String email;
     private String password;
-    private String nickname;
 }

@@ -6,8 +6,10 @@ spring:
     username: root
     password: suhan1234
     hikari:
-      jdbc-url: jdbc:mysql://localhost:3306/myapiserver
+      jdbc-url: jdbc:mysql://localhost:3306/myapiserver?autoReconnect=true&autoReconnection=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useTimezone=true&serverTimezone=Asia/Seoul&useLegacyDatetimeCode=false
   jpa:
+    hibernate:
+      ddl-auto: validate
     properties:
       hibernate:
         jdbc:

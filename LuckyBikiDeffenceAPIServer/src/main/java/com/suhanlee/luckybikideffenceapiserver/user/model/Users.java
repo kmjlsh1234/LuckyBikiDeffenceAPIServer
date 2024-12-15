@@ -34,9 +34,6 @@ public class Users {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "nickname")
-    private String nickname;
-
     @Column(name = "login_at")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime loginAt;
@@ -44,9 +41,6 @@ public class Users {
     @Column(name = "logout_at")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime logoutAt;
-
-    @Column(name = "login_ip")
-    private String loginIp;
 
     @CreatedDate
     @Column(name = "created_at")

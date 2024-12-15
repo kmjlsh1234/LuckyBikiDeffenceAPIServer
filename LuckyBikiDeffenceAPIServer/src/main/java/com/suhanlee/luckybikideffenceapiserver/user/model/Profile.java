@@ -27,6 +27,9 @@ public class Profile {
     @Column(name = "user_id")
     private long userId;
 
+    @Column(name = "nickname")
+    private String nickname;
+
     @Column(name = "image")
     private String image;
 

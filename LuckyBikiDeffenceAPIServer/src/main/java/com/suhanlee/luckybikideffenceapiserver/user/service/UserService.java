@@ -8,6 +8,7 @@ import com.suhanlee.luckybikideffenceapiserver.user.param.UserJoinParam;
 import com.suhanlee.luckybikideffenceapiserver.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final GoldRepository goldRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     //회원가입
     @Transactional(rollbackFor = Exception.class)
@@ -28,8 +30,7 @@ public class UserService {
         Users user = userRepository.save(Users.builder()
                 .status(UserStatus.LOGOUT)
                 .email(userJoinParam.getEmail())
-                .password(userJoinParam.getPassword())
-                .nickname(userJoinParam.getNickname())
+                .password(bCryptPasswordEncoder.encode(userJoinParam.getPassword()))
                 .build());
 
         //회원가입 시 재화 테이블에 등록

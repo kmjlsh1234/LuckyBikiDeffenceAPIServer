@@ -1,7 +1,10 @@
 package com.suhanlee.luckybikideffenceapiserver.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.suhanlee.luckybikideffenceapiserver.config.error.ErrorCode;
+import com.suhanlee.luckybikideffenceapiserver.config.error.exception.RestException;
 import com.suhanlee.luckybikideffenceapiserver.config.security.constants.JwtProperties;
+import com.suhanlee.luckybikideffenceapiserver.user.model.LoginAddInfo;
 import com.suhanlee.luckybikideffenceapiserver.user.model.LoginViewModel;
 import com.suhanlee.luckybikideffenceapiserver.user.model.RefreshToken;
 import com.suhanlee.luckybikideffenceapiserver.user.model.UserSimple;
@@ -30,38 +33,40 @@ import java.nio.charset.StandardCharsets;
  */
 @Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-
-    private final JwtAuthenticationService jwtAuthenticationService;
     private final AuthenticationManager authenticationManager;
+    private final JwtAuthenticationService jwtAuthenticationService;
     private final WebUtil webUtil;
 
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtAuthenticationService jwtAuthenticationService, WebUtil webUtil) {
         this.authenticationManager = authenticationManager;
         this.webUtil = webUtil;
         this.jwtAuthenticationService = jwtAuthenticationService;
-        this.setFilterProcessesUrl("auth/login");
+        this.setFilterProcessesUrl("/auth/login");
     }
 
     //로그인 시도
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+        //로그인 입력 정보
         LoginViewModel credentials;
         try{
             credentials = new ObjectMapper().readValue(request.getInputStream(), LoginViewModel.class);
-        } catch (IOException e) {
-            return null;
+        } catch (IOException e) { // 입력정보를 파싱하지 못함
+            throw new RestException(ErrorCode.USER_NOT_FOUND);
         }
 
+        // 필수 입력정보가 없음
         if(credentials == null || !StringUtils.hasText(credentials.getEmail()) || !StringUtils.hasText(credentials.getPassword())){
-            return null;
+            throw new RestException(ErrorCode.CHANGE_AMOUNT_NOT_ENOUGH);
         }
 
+        //Create Login Token
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(credentials.getEmail(), credentials.getPassword());
         Authentication authentication;
         try{
             authentication = authenticationManager.authenticate(token);
-        } catch (AuthenticationException e) {
-            return null;
+        } catch (Exception e) {
+            throw new RestException(ErrorCode.USER_NOT_FOUND);
         }
         return authentication;
     }

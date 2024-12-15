@@ -12,20 +12,17 @@ import java.util.Collection;
 public class UserPrincipal implements UserDetails {
 
     @Builder
-    public UserPrincipal(long userId, String email, String password, String nickName, int status) {
+    public UserPrincipal(long userId, String email, String password, UserStatus status) {
         this.userId = userId;
         this.email = email;
         this.password = password;
-        this.nickName = nickName;
         this.status = status;
     }
 
     private final long userId;
-    @Getter
     private final String email;
     private final String password;
-    private final String nickName;
-    private final int status;
+    private final UserStatus status;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -58,8 +55,8 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return this.status == UserStatus.NORMAL.getStatus()
-                || this.status == UserStatus.LOGOUT.getStatus();
+        return this.status == UserStatus.NORMAL
+                || this.status == UserStatus.LOGOUT;
     }
 
 
