@@ -27,3 +27,8 @@ jwt:
   secret: mysecret
 server:
   port: 8080
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.security.web: TRACE

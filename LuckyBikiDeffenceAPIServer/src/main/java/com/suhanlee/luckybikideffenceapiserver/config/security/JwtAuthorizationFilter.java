@@ -37,6 +37,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         super(authenticationManager);
         this.jwtAuthenticationService = jwtAuthenticationService;
         excludeURL = new ArrayList<>();
+        excludeURL.add("/api/v1/token/refresh");
         jwtVerifier = JWT.require(Algorithm.HMAC512(secretKey.getBytes())).build();
     }
 
