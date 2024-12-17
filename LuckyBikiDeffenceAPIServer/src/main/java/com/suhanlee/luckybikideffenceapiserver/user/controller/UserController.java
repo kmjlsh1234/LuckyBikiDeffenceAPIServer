@@ -24,6 +24,13 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    //유저 정보 조회(프로필 포함)
+    @GetMapping("/v1/user")
+    public ResponseEntity<?> getUser(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        long userId = userPrincipal.getUserId();
+        return ResponseEntity.ok(userService.getUser(userId));
+    }
+
     //로그아웃
     @PostMapping("/v1/user/logout")
     public ResponseEntity<?> logoutUser(@AuthenticationPrincipal UserPrincipal userPrincipal) {

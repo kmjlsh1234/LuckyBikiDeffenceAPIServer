@@ -58,6 +58,4 @@ public class UserPrincipal implements UserDetails {
         return this.status == UserStatus.NORMAL
                 || this.status == UserStatus.LOGOUT;
     }
-
-
 }

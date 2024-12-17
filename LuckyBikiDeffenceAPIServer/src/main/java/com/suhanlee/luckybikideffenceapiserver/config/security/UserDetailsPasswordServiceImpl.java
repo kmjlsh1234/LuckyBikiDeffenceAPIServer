@@ -21,10 +21,8 @@ public class UserDetailsPasswordServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info("loadUserByEmail : " + username);
         Users user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new RestException(ErrorCode.USER_NOT_FOUND));
-        log.info("5 : " + user.getEmail());
         UserStatus status = getStatus(user);
 
         return UserPrincipal.builder()
@@ -38,13 +36,11 @@ public class UserDetailsPasswordServiceImpl implements UserDetailsService {
     private UserStatus getStatus(Users user){
         UserStatus status = user.getStatus();
         switch(status){
-            //정지
-            //밴
+            case LOGOUT -> throw new RestException(ErrorCode.USER_NOT_FOUND);
+            case BAN -> throw new RestException(ErrorCode.USER_NOT_FOUND);
             case EXIT -> throw new RestException(ErrorCode.USER_NOT_FOUND);
             default -> {}
         }
         return status;
     }
-
-
 }

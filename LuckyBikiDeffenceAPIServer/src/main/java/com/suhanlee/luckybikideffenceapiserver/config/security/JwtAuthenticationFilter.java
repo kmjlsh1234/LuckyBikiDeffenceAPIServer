@@ -115,5 +115,4 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             log.error("sign up vo fail");
         }
     }
-
 }

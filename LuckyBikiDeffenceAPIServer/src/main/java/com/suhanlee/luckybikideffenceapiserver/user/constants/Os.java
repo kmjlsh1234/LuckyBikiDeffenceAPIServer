@@ -4,7 +4,9 @@ import lombok.Getter;
 
 @Getter
 public enum Os {
-    ANDROID(0), IOS(1);
+    ANDROID(0),
+    IOS(1),
+    ;
 
     Os(int typeNum) {
         this.typeNum = typeNum;

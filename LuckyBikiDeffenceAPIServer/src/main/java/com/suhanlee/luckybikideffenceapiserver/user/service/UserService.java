@@ -42,6 +42,11 @@ public class UserService {
                 .build());
     }
 
+    @Transactional(readOnly = true)
+    public UserProfileVo getUser(long userId){
+
+    }
+
     //로그아웃
     @Transactional(rollbackFor = Exception.class)
     public void logoutUser(long userId) {
