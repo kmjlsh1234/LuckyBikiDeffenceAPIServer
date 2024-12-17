@@ -29,7 +29,7 @@ public class ProfileController {
     @PostMapping("/v1/profile")
     public ResponseEntity<?> addProfile(@RequestBody ProfileAddParam profileAddParam, @AuthenticationPrincipal UserPrincipal userPrincipal){
         profileAddParam.setUserId(userPrincipal.getUserId());
-        return ResponseEntity.ok(profileService.addProfile(profileAddParam);
+        return ResponseEntity.ok(profileService.addProfile(profileAddParam));
     }
 
     //프로필 수정
