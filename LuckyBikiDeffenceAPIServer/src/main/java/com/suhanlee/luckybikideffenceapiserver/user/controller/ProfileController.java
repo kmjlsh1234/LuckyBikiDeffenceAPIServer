@@ -1,6 +1,7 @@
 package com.suhanlee.luckybikideffenceapiserver.user.controller;
 
 import com.suhanlee.luckybikideffenceapiserver.config.security.UserPrincipal;
+import com.suhanlee.luckybikideffenceapiserver.user.param.ProfileAddParam;
 import com.suhanlee.luckybikideffenceapiserver.user.param.ProfileModParam;
 import com.suhanlee.luckybikideffenceapiserver.user.service.ProfileService;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +27,9 @@ public class ProfileController {
 
     //프로필 추가
     @PostMapping("/v1/profile")
-    public ResponseEntity<?> addProfile(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        long userId = userPrincipal.getUserId();
-        return ResponseEntity.ok(profileService.addProfile(userId));
+    public ResponseEntity<?> addProfile(@RequestBody ProfileAddParam profileAddParam, @AuthenticationPrincipal UserPrincipal userPrincipal){
+        profileAddParam.setUserId(userPrincipal.getUserId());
+        return ResponseEntity.ok(profileService.addProfile(profileAddParam);
     }
 
     //프로필 수정

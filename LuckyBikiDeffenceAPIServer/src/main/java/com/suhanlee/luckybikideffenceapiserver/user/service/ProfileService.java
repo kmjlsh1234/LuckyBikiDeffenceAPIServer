@@ -3,6 +3,7 @@ package com.suhanlee.luckybikideffenceapiserver.user.service;
 import com.suhanlee.luckybikideffenceapiserver.config.error.ErrorCode;
 import com.suhanlee.luckybikideffenceapiserver.config.error.exception.RestException;
 import com.suhanlee.luckybikideffenceapiserver.user.model.Profile;
+import com.suhanlee.luckybikideffenceapiserver.user.param.ProfileAddParam;
 import com.suhanlee.luckybikideffenceapiserver.user.param.ProfileModParam;
 import com.suhanlee.luckybikideffenceapiserver.user.repository.ProfileRepository;
 import com.suhanlee.luckybikideffenceapiserver.user.repository.UserRepository;
@@ -34,17 +35,17 @@ public class ProfileService {
     }
 
     //프로필 추가
-    public ProfileVo addProfile(long userId){
+    public ProfileVo addProfile(ProfileAddParam profileAddParam){
 
         //기존에 프로필 있는지 검사
-        profileRepository.findByUserId(userId)
+        profileRepository.findByUserId(profileAddParam.getUserId())
                 .ifPresent(profile -> {
                     throw new RestException(ErrorCode.PROFILE_ALREADY_EXIST);
                 });
 
         Profile profile = profileRepository.save(Profile.builder()
-                        .userId(userId)
-                        .image(null)
+                        .userId(profileAddParam.getUserId())
+                        .nickname(profileAddParam.getNickname())
                         .build());
 
         return profileMapper.updateProfileToVo(profile);
