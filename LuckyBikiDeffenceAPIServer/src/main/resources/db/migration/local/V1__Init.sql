@@ -44,6 +44,7 @@ CREATE TABLE `profile`
     `id`         bigint    NOT NULL AUTO_INCREMENT COMMENT '프로필 고유번호',
     `user_id`    bigint    NOT NULL COMMENT '유저고유번호',
     `nickname`   varchar(100)       DEFAULT NULL COMMENT '닉네임',
+    `level`      integer   NOT NULL DEFAULT 1    COMMENT '레벨',
     `image`      varchar(100)       DEFAULT NULL COMMENT '이미지 경로',
     `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
     `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',

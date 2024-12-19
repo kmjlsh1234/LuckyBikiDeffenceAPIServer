@@ -3,6 +3,7 @@ package com.suhanlee.luckybikideffenceapiserver.currency.service;
 import com.suhanlee.luckybikideffenceapiserver.config.error.ErrorCode;
 import com.suhanlee.luckybikideffenceapiserver.config.error.exception.RestException;
 import com.suhanlee.luckybikideffenceapiserver.currency.constants.ChangeType;
+import com.suhanlee.luckybikideffenceapiserver.currency.constants.GoldHistoryDesc;
 import com.suhanlee.luckybikideffenceapiserver.currency.model.Gold;
 import com.suhanlee.luckybikideffenceapiserver.currency.model.GoldRecord;
 import com.suhanlee.luckybikideffenceapiserver.currency.param.GoldModParam;
@@ -39,7 +40,7 @@ public class GoldService {
     //gold 추가
     @Transactional(rollbackFor = Exception.class)
     public int goldDeposit(GoldModParam goldModParam){
-        int totalAmount = addGoldWithLock(goldModParam);
+        int totalAmount = addGoldWithLock(goldModParam, GoldHistoryDesc.DEPOSIT_BY_ITEM_BUY);
         return totalAmount;
     }
 
@@ -47,11 +48,11 @@ public class GoldService {
     @Transactional(rollbackFor = Exception.class)
     public int goldWithDraw(GoldModParam goldModParam){
 
-        int totalAmount = spendGoldWithLock(goldModParam);
+        int totalAmount = spendGoldWithLock(goldModParam, GoldHistoryDesc.DEPOSIT_BY_ITEM_BUY);
         return totalAmount;
     }
 
-    private int addGoldWithLock(GoldModParam goldModParam){
+    private int addGoldWithLock(GoldModParam goldModParam, String goldHistoryDesc){
 
         //멱등키 중복 체크
         checkDuplicateIdempotentKey(goldModParam.getIdempotentKey());
@@ -78,7 +79,7 @@ public class GoldService {
                             .changeType(ChangeType.DEPOSIT)
                             .changeGold(goldModParam.getChangeAmount())
                             .resultGold(totalAmount)
-                            .changeDesc(goldModParam.getGoldHistoryDesc().getDesc())
+                            .changeDesc(goldHistoryDesc)
                             .idempotentKey(goldModParam.getIdempotentKey())
                             .build());
 
@@ -90,7 +91,7 @@ public class GoldService {
         return totalAmount;
     }
 
-    private int spendGoldWithLock(GoldModParam goldModParam){
+    private int spendGoldWithLock(GoldModParam goldModParam, String goldHistoryDesc){
 
         //멱등키 중복 체크
         checkDuplicateIdempotentKey(goldModParam.getIdempotentKey());
@@ -119,7 +120,7 @@ public class GoldService {
                     .changeType(ChangeType.WITHDRAW)
                     .changeGold(goldModParam.getChangeAmount())
                     .resultGold(totalAmount)
-                    .changeDesc(goldModParam.getGoldHistoryDesc().toString())
+                    .changeDesc(goldHistoryDesc)
                     .idempotentKey(goldModParam.getIdempotentKey())
                     .build());
 

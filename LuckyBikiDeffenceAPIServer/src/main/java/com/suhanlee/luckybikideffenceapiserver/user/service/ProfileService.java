@@ -12,6 +12,7 @@ import com.suhanlee.luckybikideffenceapiserver.user.vo.ProfileVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Slf4j
 @Service
@@ -53,7 +54,11 @@ public class ProfileService {
 
     //프로필 수정
     public ProfileVo modProfile(ProfileModParam profileModParam){
-        checkModParameter(profileModParam);
+
+        //닉네임 길이 검사
+        if(profileModParam.getNickname().length() < 2 || profileModParam.getNickname().length() > 15){
+            throw new RestException(ErrorCode.USER_NOT_FOUND);
+        }
 
         Profile profile = retrieveProfile(profileModParam.getUserId());
         profileMapper.updateProfileFromModParam(profileModParam, profile);
@@ -64,9 +69,5 @@ public class ProfileService {
     public Profile retrieveProfile(long userId){
         return profileRepository.findByUserId(userId)
                 .orElseThrow(() -> new RestException(ErrorCode.PROFILE_NOT_FOUND));
-    }
-
-    public void checkModParameter(ProfileModParam profileModParam){
-        //TODO : parameter check
     }
 }

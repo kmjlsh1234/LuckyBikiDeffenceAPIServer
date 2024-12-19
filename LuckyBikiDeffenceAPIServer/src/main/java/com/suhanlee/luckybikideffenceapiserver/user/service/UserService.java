@@ -3,11 +3,14 @@ package com.suhanlee.luckybikideffenceapiserver.user.service;
 import com.suhanlee.luckybikideffenceapiserver.currency.model.Gold;
 import com.suhanlee.luckybikideffenceapiserver.currency.repository.GoldRepository;
 import com.suhanlee.luckybikideffenceapiserver.user.constants.UserStatus;
+import com.suhanlee.luckybikideffenceapiserver.user.model.Profile;
 import com.suhanlee.luckybikideffenceapiserver.user.model.Users;
 import com.suhanlee.luckybikideffenceapiserver.user.param.UserJoinParam;
+import com.suhanlee.luckybikideffenceapiserver.user.repository.ProfileRepository;
 import com.suhanlee.luckybikideffenceapiserver.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +23,7 @@ import java.time.LocalDateTime;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final ProfileRepository profileRepository;
     private final GoldRepository goldRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -27,12 +31,19 @@ public class UserService {
     @Transactional(rollbackFor = Exception.class)
     public void joinUser(UserJoinParam userJoinParam) {
         checkJoinParameter(userJoinParam);
-        log.info(userJoinParam.getEmail());
-        log.info(userJoinParam.getPassword());
+
         Users user = userRepository.save(Users.builder()
                 .status(UserStatus.LOGOUT)
                 .email(userJoinParam.getEmail())
                 .password(bCryptPasswordEncoder.encode(userJoinParam.getPassword()))
+                .build());
+
+        //회원가입 시 프로필 등록
+        profileRepository.save(Profile.builder()
+                .userId(user.getUserId())
+                .level(1)
+                .image("/image/profile/profile_00")
+                .nickname(null)
                 .build());
 
         //회원가입 시 재화 테이블에 등록
@@ -42,9 +53,8 @@ public class UserService {
                 .build());
     }
 
-    @Transactional(readOnly = true)
-    public UserProfileVo getUser(long userId){
-
+    public User getUser(long userId) {
+        return null;
     }
 
     //로그아웃

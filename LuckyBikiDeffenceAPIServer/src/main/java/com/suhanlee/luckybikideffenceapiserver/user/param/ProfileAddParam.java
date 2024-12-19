@@ -9,5 +9,6 @@ import lombok.Setter;
 public class ProfileAddParam {
     @JsonIgnore
     private long userId;
+    private int level;
     private String nickname;
 }

@@ -3,11 +3,6 @@ package com.suhanlee.luckybikideffenceapiserver.currency.constants;
 import lombok.Getter;
 
 @Getter
-public enum GoldHistoryDesc {
-    DEPOSIT_BY_WIN_GAME("deposit by win game");
-
-    private String desc;
-    GoldHistoryDesc(String desc) {
-        this.desc = desc;
-    }
+public class GoldHistoryDesc {
+    public static final String DEPOSIT_BY_ITEM_BUY = "Deposit gold by item buy";;
 }
