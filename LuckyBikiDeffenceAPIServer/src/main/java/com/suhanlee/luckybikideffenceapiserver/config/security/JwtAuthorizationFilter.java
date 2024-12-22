@@ -2,10 +2,11 @@ package com.suhanlee.luckybikideffenceapiserver.config.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.auth0.jwt.exceptions.*;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.suhanlee.luckybikideffenceapiserver.config.error.ErrorCode;
 import com.suhanlee.luckybikideffenceapiserver.config.security.constants.JwtProperties;
 import com.suhanlee.luckybikideffenceapiserver.user.service.JwtAuthenticationService;
 import jakarta.servlet.FilterChain;
@@ -14,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.xml.bind.DatatypeConverter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,7 +23,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * JWT 인증을 위한 필터
@@ -56,12 +61,11 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         //JWT없거나 검사할 필요가 없으면 스킵
         if(header == null || isContainExcludeURL(requestUrl)) {
             chain.doFilter(request,response);
-            log.info("no jwt or not contain exclude url");
             return;
         }
 
         //유저 정보 취득
-        Authentication authentication = getUserAuthentication(request, response);
+        Authentication authentication = getUserNamePasswordAuthentication(request, response);
         if(authentication == null) {
             log.info("no authentication");
             return;
@@ -70,33 +74,44 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         chain.doFilter(request,response);
     }
 
-    private Authentication getUserAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private Authentication getUserNamePasswordAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String token = request.getHeader(JwtProperties.HEADER_AUTH);
 
         //parse token and check validate
         DecodedJWT decodedJWT;
         try{
             decodedJWT = jwtVerifier.verify(token);
-        } catch(TokenExpiredException e) {
-            //OutErrorMessage(response, );
-            logger.info(e);
+        } catch(TokenExpiredException e) { //토큰 기간 만료
+            OutErrorMessage(response, ErrorCode.JWT_TOKEN_EXPIRATION.getStatus(), ErrorCode.JWT_TOKEN_EXPIRATION.getCode(), ErrorCode.JWT_TOKEN_EXPIRATION.getMessage());
             return null;
-        } catch(JWTVerificationException e) {
-            logger.info(e);
+        } catch(SignatureVerificationException | JWTDecodeException | InvalidClaimException e) { //토큰 오류
+            OutErrorMessage(response, ErrorCode.INVALID_AUTH_TOKEN.getStatus(), ErrorCode.INVALID_AUTH_TOKEN.getCode(), ErrorCode.INVALID_AUTH_TOKEN.getMessage());
+            return null;
+        }
+        catch(JWTVerificationException e) { //토큰 검증 오류
+            OutErrorMessage(response, ErrorCode.JWT_TOKEN_AUTH_ERROR.getStatus(), ErrorCode.JWT_TOKEN_AUTH_ERROR.getCode(), ErrorCode.JWT_TOKEN_AUTH_ERROR.getMessage());
             return null;
         }
         String converted = decodedJWT.getSubject();
         String issueNo = decodedJWT.getId();
+        log.debug("converted : {}", converted);
+        log.debug("issueNo : {}", issueNo);
 
-        //토큰 발행번호로 블랙리스트 조회
+        //TODO : 토큰 발행번호로 블랙리스트 조회
 
         String subject = new String(DatatypeConverter.parseHexBinary(converted));
         String[] subArray = subject.split(JwtProperties.SPLITTER);
 
+        log.debug("subject : {}", subject);
+        for(int i=0; i<subArray.length; i++) {
+            log.debug("subArray{} : {}", i, subArray[i]);
+        }
+
         if(subArray[0] != null) {
             long userId = Long.parseLong(subArray[1]);
             String email = subArray[0];
-            // 유저 user_Id로 블랙리스트에 포함 되어 있는지 확인한다.
+
+            // TODO : 유저 user_Id로 블랙리스트에 포함 되어 있는지 확인한다.
 
             UserPrincipal principal = UserPrincipal.builder()
                     .userId(userId)
@@ -104,11 +119,21 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                     .build();
             return new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
         }
-        log.info("break point1");
         return null;
     }
 
     private void OutErrorMessage(HttpServletResponse response, int statusCode, int errorCode, String errorMessage) throws IOException {
-        //verification error처리
+        //verification error 처리
+        //filter에서 생성된 에러의 경우 controller advice에서 핸들링 할 수 없다.
+        response.setStatus(statusCode);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("error_code", errorCode);
+        resultMap.put("error_message", errorMessage);
+        resultMap.put("error_timestamp", LocalDateTime.now());
+        ObjectMapper mapper = new ObjectMapper();
+        PrintWriter out = response.getWriter();
+        out.print(mapper.writeValueAsString(resultMap));
+        out.flush();
     }
 }
