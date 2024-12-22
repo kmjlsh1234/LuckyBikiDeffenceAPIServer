@@ -39,6 +39,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         excludeURL = new ArrayList<>();
         excludeURL.add("/api/v1/token/refresh");
         excludeURL.add("/api/v1/user/join");
+        excludeURL.add("/auth/login");
         jwtVerifier = JWT.require(Algorithm.HMAC512(secretKey.getBytes())).build();
     }
 
@@ -55,12 +56,14 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         //JWT없거나 검사할 필요가 없으면 스킵
         if(header == null || isContainExcludeURL(requestUrl)) {
             chain.doFilter(request,response);
+            log.info("no jwt or not contain exclude url");
             return;
         }
 
         //유저 정보 취득
         Authentication authentication = getUserAuthentication(request, response);
         if(authentication == null) {
+            log.info("no authentication");
             return;
         }
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -76,8 +79,10 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             decodedJWT = jwtVerifier.verify(token);
         } catch(TokenExpiredException e) {
             //OutErrorMessage(response, );
+            logger.info(e);
             return null;
         } catch(JWTVerificationException e) {
+            logger.info(e);
             return null;
         }
         String converted = decodedJWT.getSubject();
@@ -99,6 +104,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                     .build();
             return new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
         }
+        log.info("break point1");
         return null;
     }
 

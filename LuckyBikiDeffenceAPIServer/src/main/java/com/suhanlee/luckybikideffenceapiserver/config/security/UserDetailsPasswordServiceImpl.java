@@ -36,7 +36,7 @@ public class UserDetailsPasswordServiceImpl implements UserDetailsService {
     private UserStatus getStatus(Users user){
         UserStatus status = user.getStatus();
         switch(status){
-            case LOGOUT -> throw new RestException(ErrorCode.USER_NOT_FOUND);
+            //case LOGOUT -> throw new RestException(ErrorCode.USER_NOT_FOUND);
             case BAN -> throw new RestException(ErrorCode.USER_NOT_FOUND);
             case EXIT -> throw new RestException(ErrorCode.USER_NOT_FOUND);
             default -> {}

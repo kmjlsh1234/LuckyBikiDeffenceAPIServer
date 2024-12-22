@@ -25,13 +25,6 @@ public class ProfileController {
         return ResponseEntity.ok(profileService.getProfile(userId));
     }
 
-    //프로필 추가
-    @PostMapping("/v1/profile")
-    public ResponseEntity<?> addProfile(@RequestBody ProfileAddParam profileAddParam, @AuthenticationPrincipal UserPrincipal userPrincipal){
-        profileAddParam.setUserId(userPrincipal.getUserId());
-        return ResponseEntity.ok(profileService.addProfile(profileAddParam));
-    }
-
     //프로필 수정
     @PutMapping("/v1/profile")
     public ResponseEntity<?> modProfile(@RequestBody ProfileModParam profileModParam, @AuthenticationPrincipal UserPrincipal userPrincipal){
