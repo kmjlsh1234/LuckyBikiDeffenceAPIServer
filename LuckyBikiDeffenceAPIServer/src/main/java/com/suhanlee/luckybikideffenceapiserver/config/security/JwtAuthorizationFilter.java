@@ -67,7 +67,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         //유저 정보 취득
         Authentication authentication = getUserNamePasswordAuthentication(request, response);
         if(authentication == null) {
-            log.info("no authentication");
+            log.debug("No Authentication found");
             return;
         }
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -76,7 +76,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private Authentication getUserNamePasswordAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String token = request.getHeader(JwtProperties.HEADER_AUTH);
-
+        log.debug("token : {}", token);
         //parse token and check validate
         DecodedJWT decodedJWT;
         try{
