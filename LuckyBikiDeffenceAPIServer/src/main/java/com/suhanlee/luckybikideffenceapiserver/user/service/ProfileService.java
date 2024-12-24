@@ -24,11 +24,7 @@ public class ProfileService {
 
     //프로필 조회
     public Profile getProfile(long userId){
-        userRepository.findByUserId(userId)
-                .orElseThrow(() -> new RestException(ErrorCode.USER_NOT_FOUND));
-
-        return profileRepository.findByUserId(userId)
-                .orElseThrow(() -> new RestException(ErrorCode.PROFILE_NOT_FOUND));
+        return retrieveProfile(userId);
     }
 
     //프로필 수정

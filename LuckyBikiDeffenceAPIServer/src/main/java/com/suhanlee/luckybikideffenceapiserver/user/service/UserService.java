@@ -1,5 +1,7 @@
 package com.suhanlee.luckybikideffenceapiserver.user.service;
 
+import com.suhanlee.luckybikideffenceapiserver.config.error.ErrorCode;
+import com.suhanlee.luckybikideffenceapiserver.config.error.exception.RestException;
 import com.suhanlee.luckybikideffenceapiserver.currency.model.Gold;
 import com.suhanlee.luckybikideffenceapiserver.currency.repository.GoldRepository;
 import com.suhanlee.luckybikideffenceapiserver.user.constants.UserStatus;
@@ -11,6 +13,7 @@ import com.suhanlee.luckybikideffenceapiserver.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
+import org.springframework.data.redis.connection.RedisInvalidSubscriptionException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -81,5 +84,16 @@ public class UserService {
 
     private void checkJoinParameter(UserJoinParam userJoinParam) {
 
+        //동일한 이메일이 존재하는지 체크
+        if(userRepository.existsByEmail(userJoinParam.getEmail())) {
+            throw new RestException(ErrorCode.EMAIL_ALREADY_EXIST);
+        }
+
+        //비밀번호 길이 체크
+        if(userJoinParam.getPassword().length() < 6 || userJoinParam.getPassword().length() > 12){
+            throw new RestException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        //TODO : 형식도 체크
     }
 }
