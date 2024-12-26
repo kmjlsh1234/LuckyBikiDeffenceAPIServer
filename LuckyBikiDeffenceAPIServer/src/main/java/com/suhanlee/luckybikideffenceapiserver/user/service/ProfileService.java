@@ -18,13 +18,13 @@ import org.springframework.stereotype.Service;
 public class ProfileService {
 
     private final ProfileRepository profileRepository;
-    private final UserRepository userRepository;
 
     private final ProfileMapper profileMapper;
 
     //프로필 조회
-    public Profile getProfile(long userId){
-        return retrieveProfile(userId);
+    public ProfileVo getProfile(long userId){
+        Profile profile = retrieveProfile(userId);
+        return profileMapper.updateProfileToVo(profile);
     }
 
     //프로필 수정

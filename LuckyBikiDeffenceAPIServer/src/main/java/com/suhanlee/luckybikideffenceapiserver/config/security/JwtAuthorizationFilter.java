@@ -24,8 +24,11 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -37,7 +40,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     private final JwtAuthenticationService jwtAuthenticationService;
     private final ArrayList<String> excludeURL; //jwt를 넣더라도 check하지 않는 API URL 리스트
     private final JWTVerifier jwtVerifier;
-
+    public static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     public JwtAuthorizationFilter(AuthenticationManager authenticationManager, String secretKey, JwtAuthenticationService jwtAuthenticationService) {
         super(authenticationManager);
         this.jwtAuthenticationService = jwtAuthenticationService;
@@ -67,7 +70,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         //유저 정보 취득
         Authentication authentication = getUserNamePasswordAuthentication(request, response);
         if(authentication == null) {
-            log.debug("No Authentication found");
+            log.info("No Authentication found");
             return;
         }
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -76,7 +79,6 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private Authentication getUserNamePasswordAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String token = request.getHeader(JwtProperties.HEADER_AUTH);
-        log.debug("token : {}", token);
         //parse token and check validate
         DecodedJWT decodedJWT;
         try{
@@ -130,7 +132,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         HashMap<String, Object> resultMap = new HashMap<>();
         resultMap.put("error_code", errorCode);
         resultMap.put("error_message", errorMessage);
-        resultMap.put("error_timestamp", LocalDateTime.now());
+        resultMap.put("error_timestamp", DATE_FORMAT.format(new Date()));
         ObjectMapper mapper = new ObjectMapper();
         PrintWriter out = response.getWriter();
         out.print(mapper.writeValueAsString(resultMap));

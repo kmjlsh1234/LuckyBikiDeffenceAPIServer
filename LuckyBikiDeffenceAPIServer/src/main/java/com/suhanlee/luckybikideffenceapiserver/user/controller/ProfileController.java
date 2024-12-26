@@ -1,7 +1,6 @@
 package com.suhanlee.luckybikideffenceapiserver.user.controller;
 
 import com.suhanlee.luckybikideffenceapiserver.config.security.UserPrincipal;
-import com.suhanlee.luckybikideffenceapiserver.user.param.ProfileAddParam;
 import com.suhanlee.luckybikideffenceapiserver.user.param.ProfileModParam;
 import com.suhanlee.luckybikideffenceapiserver.user.service.ProfileService;
 import lombok.RequiredArgsConstructor;

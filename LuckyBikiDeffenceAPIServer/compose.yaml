@@ -2,7 +2,7 @@ services:
   mysql:
     image: mysql:8.0.39
     ports:
-      - "3306:3306"
+      - "4000:3306"
     volumes:
       - ./db/mysql/init:/docker-entrypoint-initdb.d
       - ./db/mysql/data:/var/lib/mysql
@@ -12,5 +12,5 @@ services:
   redis:
     image: redis:7.0
     ports:
-      - "6379:6379"
+      - "6380:6379"
 
