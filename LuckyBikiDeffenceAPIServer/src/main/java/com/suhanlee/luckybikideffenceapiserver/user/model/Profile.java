@@ -30,6 +30,9 @@ public class Profile {
     @Column(name = "level")
     private int level;
 
+    @Column(name = "ex")
+    private long ex;
+
     @Column(name = "nickname")
     private String nickname;
 
@@ -41,4 +44,8 @@ public class Profile {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    public Long GetCurrentMaxEx(){
+        return level * 100L;
+    }
 }

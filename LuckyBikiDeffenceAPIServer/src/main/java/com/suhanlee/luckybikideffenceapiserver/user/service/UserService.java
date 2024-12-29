@@ -45,7 +45,8 @@ public class UserService {
         profileRepository.save(Profile.builder()
                 .userId(user.getUserId())
                 .level(1)
-                .image("/image/profile/profile_00")
+                .ex(0L)
+                .image("profile_0")
                 .nickname(null)
                 .build());
 

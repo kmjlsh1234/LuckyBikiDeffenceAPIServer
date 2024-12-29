@@ -18,6 +18,7 @@ public class ProfileVo {
     private long id;
     private long userId;
     private int level;
+    private long ex;
     private String nickname;
     private String image;
     private LocalDateTime createdAt;

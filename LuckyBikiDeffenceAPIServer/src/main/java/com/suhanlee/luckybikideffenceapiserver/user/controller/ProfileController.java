@@ -1,6 +1,7 @@
 package com.suhanlee.luckybikideffenceapiserver.user.controller;
 
 import com.suhanlee.luckybikideffenceapiserver.config.security.UserPrincipal;
+import com.suhanlee.luckybikideffenceapiserver.user.param.ExAddParam;
 import com.suhanlee.luckybikideffenceapiserver.user.param.ProfileModParam;
 import com.suhanlee.luckybikideffenceapiserver.user.service.ProfileService;
 import lombok.RequiredArgsConstructor;
@@ -30,5 +31,13 @@ public class ProfileController {
         long userId = userPrincipal.getUserId();
         profileModParam.setUserId(userId);
         return ResponseEntity.ok(profileService.modProfile(profileModParam));
+    }
+
+    //경험치 추가
+    @PostMapping
+    public ResponseEntity<?> addEx(@RequestBody ExAddParam exAddParam, @AuthenticationPrincipal UserPrincipal userPrincipal){
+        long userId = userPrincipal.getUserId();
+        exAddParam.setUserId(userId);
+        return ResponseEntity.ok(profileService.addEx(exAddParam));
     }
 }

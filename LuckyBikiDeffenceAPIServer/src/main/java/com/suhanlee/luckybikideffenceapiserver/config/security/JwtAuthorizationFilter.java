@@ -79,6 +79,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private Authentication getUserNamePasswordAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String token = request.getHeader(JwtProperties.HEADER_AUTH);
+        log.info("token : " + token);
         //parse token and check validate
         DecodedJWT decodedJWT;
         try{
@@ -127,6 +128,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     private void OutErrorMessage(HttpServletResponse response, int statusCode, int errorCode, String errorMessage) throws IOException {
         //verification error 처리
         //filter에서 생성된 에러의 경우 controller advice에서 핸들링 할 수 없다.
+        log.info(errorMessage);
         response.setStatus(statusCode);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         HashMap<String, Object> resultMap = new HashMap<>();
