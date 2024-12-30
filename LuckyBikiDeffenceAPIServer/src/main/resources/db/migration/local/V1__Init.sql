@@ -124,3 +124,21 @@ CREATE TABLE `users`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT ='유저';
+
+CREATE TABLE `stat`
+(
+    `id`                bigint    NOT NULL AUTO_INCREMENT COMMENT '통계 고유번호',
+    `user_id`           bigint    NOT NULL COMMENT '유저고유번호',
+    `longest_play_time` bigint    NOT NULL DEFAULT 0 COMMENT '가장 오래한 스테이지 시간',
+    `boss_kill_count`   bigint    NOT NULL DEFAULT 0 COMMENT '보스 처치 횟수',
+    `kill_count`        bigint    NOT NULL DEFAULT 0 COMMENT '적 처치 횟수',
+    `solo_play_time`    bigint    NOT NULL DEFAULT 0 COMMENT '솔로 플레이 시간',
+    `multi_play_time`   bigint    NOT NULL DEFAULT 0 COMMENT '멀티 플레이 시간',
+    `solo_play_count`   int       NOT NULL DEFAULT 0 COMMENT '솔로 플레이 횟수',
+    `multi_play_count`  bigint    NOT NULL DEFAULT 0 COMMENT '멀티 플레이 횟수',
+    `created_at`        timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    `updated_at`        timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='통계';

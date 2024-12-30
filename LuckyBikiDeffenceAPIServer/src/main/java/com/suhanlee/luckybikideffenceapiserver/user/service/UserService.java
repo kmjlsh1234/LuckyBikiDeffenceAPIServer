@@ -6,9 +6,11 @@ import com.suhanlee.luckybikideffenceapiserver.currency.model.Gold;
 import com.suhanlee.luckybikideffenceapiserver.currency.repository.GoldRepository;
 import com.suhanlee.luckybikideffenceapiserver.user.constants.UserStatus;
 import com.suhanlee.luckybikideffenceapiserver.user.model.Profile;
+import com.suhanlee.luckybikideffenceapiserver.user.model.Stat;
 import com.suhanlee.luckybikideffenceapiserver.user.model.Users;
 import com.suhanlee.luckybikideffenceapiserver.user.param.UserJoinParam;
 import com.suhanlee.luckybikideffenceapiserver.user.repository.ProfileRepository;
+import com.suhanlee.luckybikideffenceapiserver.user.repository.StatRepository;
 import com.suhanlee.luckybikideffenceapiserver.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +31,7 @@ public class UserService {
     private final ProfileRepository profileRepository;
     private final GoldRepository goldRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final StatRepository statRepository;
 
     //회원가입
     @Transactional(rollbackFor = Exception.class)
@@ -48,6 +51,18 @@ public class UserService {
                 .ex(0L)
                 .image("profile_0")
                 .nickname(null)
+                .build());
+
+        //회원가입 시 스탯 등록
+        statRepository.save(Stat.builder()
+                .userId(user.getUserId())
+                .longestPlayTime(0L)
+                .bossKillCount(0L)
+                .killCount(0L)
+                .soloPlayTime(0L)
+                .multiPlayTime(0L)
+                .soloPlayCount(0)
+                .multiPlayCount(0)
                 .build());
 
         //회원가입 시 재화 테이블에 등록
