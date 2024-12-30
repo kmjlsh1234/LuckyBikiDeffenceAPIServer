@@ -1,5 +1,6 @@
 package com.suhanlee.luckybikideffenceapiserver.user.model;
 
+import com.suhanlee.luckybikideffenceapiserver.game.constants.GameType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,6 +31,9 @@ public class Stat {
     @Column(name = "longest_play_time")
     private long longestPlayTime;
 
+    @Column(name = "wave_count")
+    private int waveCount;
+
     @Column(name = "boss_kill_count")
     private long bossKillCount;
 
@@ -55,4 +59,34 @@ public class Stat {
     @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    public void updateLongestPlayTime(long playTime){
+        longestPlayTime = (longestPlayTime > playTime) ? longestPlayTime : playTime;
+    }
+
+    public void updateWaveCount(int wave){
+        waveCount = (waveCount > wave) ? waveCount: wave;
+    }
+
+    public void addBossKillCount(long bossKillCount){
+        bossKillCount += bossKillCount;
+    }
+
+    public void addKillCount(long killCount){
+        killCount += killCount;
+    }
+
+    public void addPlayTime(GameType gameType, long playTime){
+        switch(gameType){
+            case SOLO -> soloPlayTime += playTime;
+            case MULTI -> multiPlayTime += playTime;
+        }
+    }
+
+    public void addPlayCount(GameType gameType){
+        switch(gameType){
+            case SOLO -> this.soloPlayCount++;
+            case MULTI -> this.multiPlayCount++;
+        }
+    }
 }

@@ -130,6 +130,7 @@ CREATE TABLE `stat`
     `id`                bigint    NOT NULL AUTO_INCREMENT COMMENT '통계 고유번호',
     `user_id`           bigint    NOT NULL COMMENT '유저고유번호',
     `longest_play_time` bigint    NOT NULL DEFAULT 0 COMMENT '가장 오래한 스테이지 시간',
+    `wave_count`        int       NOT NULL DEFAULT 0 COMMENT '가장 오래 버틴 웨이브 카운트',
     `boss_kill_count`   bigint    NOT NULL DEFAULT 0 COMMENT '보스 처치 횟수',
     `kill_count`        bigint    NOT NULL DEFAULT 0 COMMENT '적 처치 횟수',
     `solo_play_time`    bigint    NOT NULL DEFAULT 0 COMMENT '솔로 플레이 시간',

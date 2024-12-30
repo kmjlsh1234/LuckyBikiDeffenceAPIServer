@@ -1,15 +1,14 @@
 package com.suhanlee.luckybikideffenceapiserver.user.util;
 
 import com.suhanlee.luckybikideffenceapiserver.user.model.Stat;
-import com.suhanlee.luckybikideffenceapiserver.user.param.StatModParam;
 import com.suhanlee.luckybikideffenceapiserver.user.vo.StatVo;
-import org.mapstruct.*;
+import org.mapstruct.BeanMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface StatMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     StatVo updateStatToVo(Stat stat);
-
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateStatFromModParam(StatModParam param, @MappingTarget Stat stat);
 }

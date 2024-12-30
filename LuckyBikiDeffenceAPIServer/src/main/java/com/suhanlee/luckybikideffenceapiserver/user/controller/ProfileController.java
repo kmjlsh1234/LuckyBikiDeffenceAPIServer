@@ -2,6 +2,7 @@ package com.suhanlee.luckybikideffenceapiserver.user.controller;
 
 import com.suhanlee.luckybikideffenceapiserver.config.security.UserPrincipal;
 import com.suhanlee.luckybikideffenceapiserver.user.param.ExAddParam;
+import com.suhanlee.luckybikideffenceapiserver.user.param.LevelAddParam;
 import com.suhanlee.luckybikideffenceapiserver.user.param.ProfileModParam;
 import com.suhanlee.luckybikideffenceapiserver.user.service.ProfileService;
 import lombok.RequiredArgsConstructor;
@@ -34,10 +35,18 @@ public class ProfileController {
     }
 
     //경험치 추가
-    @PostMapping
+    @PostMapping("/v1/ex")
     public ResponseEntity<?> addEx(@RequestBody ExAddParam exAddParam, @AuthenticationPrincipal UserPrincipal userPrincipal){
         long userId = userPrincipal.getUserId();
         exAddParam.setUserId(userId);
         return ResponseEntity.ok(profileService.addEx(exAddParam));
+    }
+
+    //레벨업
+    @PostMapping("/v1/level")
+    public ResponseEntity<?> addLevel(@RequestBody LevelAddParam levelAddParam, @AuthenticationPrincipal UserPrincipal userPrincipal){
+        long userId = userPrincipal.getUserId();
+        levelAddParam.setUserId(userId);
+        return ResponseEntity.ok().build();
     }
 }

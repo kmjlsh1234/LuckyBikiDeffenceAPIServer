@@ -11,6 +11,7 @@ public class StatVo {
     private long id;
     private long userId;
     private long longestPlayTime;
+    private int waveCount;
     private long bossKillCount;
     private long killCount;
     private long soloPlayTime;
