@@ -1,15 +1,18 @@
 spring:
+  profiles:
+    active: dev
   config:
-      on-profile: default
+      on-profile: dev
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: suhan1234
     hikari:
-      jdbc-url: jdbc:mysql://localhost:4000/myapiserver?autoReconnect=true&autoReconnection=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useTimezone=true&serverTimezone=Asia/Seoul&useLegacyDatetimeCode=false
+      jdbc-url: jdbc:mysql://mysql:3306/myapiserver?autoReconnect=true&autoReconnection=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useTimezone=true&serverTimezone=Asia/Seoul&useLegacyDatetimeCode=false
+    url: jdbc:mysql://mysql:3306/myapiserver?autoReconnect=true&autoReconnection=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useTimezone=true&serverTimezone=Asia/Seoul&useLegacyDatetimeCode=false
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
     properties:
       hibernate:
         jdbc:
@@ -21,8 +24,8 @@ spring:
     locations: classpath:db/migration/local,classpath:db/callback
     validateMigrationNaming: true
 redis:
-  host: 127.0.0.1
-  port: 6380
+  host: redis
+  port: 6379
 jwt:
   secret: mysecret
 server:

@@ -1,6 +1,23 @@
 services:
+  app:
+    image: luckybikideffenceapiserver-0.0.1-snapshot.jar
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: springboot-app
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - backend
+
   mysql:
     image: mysql:8.0.39
+    container_name: mysql
     ports:
       - "4000:3306"
     volumes:
@@ -9,8 +26,20 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: suhan1234
       MYSQL_DATABASE: myapiserver
+    restart: always
+    networks:
+      - backend
   redis:
     image: redis:7.0
+    container_name: redis
     ports:
       - "6380:6379"
+    networks:
+      - backend
+    restart: always
+
+networks:
+  backend:
+    driver: bridge
+
 

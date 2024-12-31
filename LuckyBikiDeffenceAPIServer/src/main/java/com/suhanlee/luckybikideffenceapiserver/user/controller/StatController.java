@@ -1,12 +1,10 @@
 package com.suhanlee.luckybikideffenceapiserver.user.controller;
 
 import com.suhanlee.luckybikideffenceapiserver.config.security.UserPrincipal;
-import com.suhanlee.luckybikideffenceapiserver.game.param.GameInfoParam;
 import com.suhanlee.luckybikideffenceapiserver.user.param.StatUpdateParam;
 import com.suhanlee.luckybikideffenceapiserver.user.service.StatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;

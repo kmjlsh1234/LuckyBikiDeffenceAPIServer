@@ -1,6 +1,6 @@
 package com.suhanlee.luckybikideffenceapiserver.user.model;
 
-import com.suhanlee.luckybikideffenceapiserver.game.constants.GameType;
+import com.suhanlee.luckybikideffenceapiserver.user.constants.GameType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -78,14 +78,14 @@ public class Stat {
 
     public void addPlayTime(GameType gameType, long playTime){
         switch(gameType){
-            case SOLO -> soloPlayTime += playTime;
+            case SINGLE -> soloPlayTime += playTime;
             case MULTI -> multiPlayTime += playTime;
         }
     }
 
     public void addPlayCount(GameType gameType){
         switch(gameType){
-            case SOLO -> this.soloPlayCount++;
+            case SINGLE -> this.soloPlayCount++;
             case MULTI -> this.multiPlayCount++;
         }
     }
