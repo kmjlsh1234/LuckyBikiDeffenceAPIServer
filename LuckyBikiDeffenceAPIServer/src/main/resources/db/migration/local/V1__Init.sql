@@ -68,6 +68,19 @@ CREATE TABLE `diamond_record`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT ='다이아몬드 기록';
 
+CREATE TABLE `energy`
+(
+    `id`         bigint    NOT NULL AUTO_INCREMENT COMMENT '행동력 고유번호',
+    `user_id`    bigint    NOT NULL COMMENT '유저고유번호',
+    `amount`     int       NOT NULL DEFAULT 0 COMMENT '행동력',
+    `last_charge_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '마지막 충전 시각',
+    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성시각',
+    `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경시각',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci COMMENT ='행동력';
+
 CREATE TABLE `jwt_record`
 (
     `record_no`        bigint    NOT NULL AUTO_INCREMENT COMMENT '발급번호',

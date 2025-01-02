@@ -2,7 +2,11 @@ package com.suhanlee.luckybikideffenceapiserver.user.service;
 
 import com.suhanlee.luckybikideffenceapiserver.config.error.ErrorCode;
 import com.suhanlee.luckybikideffenceapiserver.config.error.exception.RestException;
+import com.suhanlee.luckybikideffenceapiserver.currency.model.Diamond;
+import com.suhanlee.luckybikideffenceapiserver.currency.model.Energy;
 import com.suhanlee.luckybikideffenceapiserver.currency.model.Gold;
+import com.suhanlee.luckybikideffenceapiserver.currency.repository.DiamondRepository;
+import com.suhanlee.luckybikideffenceapiserver.currency.repository.EnergyRepository;
 import com.suhanlee.luckybikideffenceapiserver.currency.repository.GoldRepository;
 import com.suhanlee.luckybikideffenceapiserver.user.constants.UserStatus;
 import com.suhanlee.luckybikideffenceapiserver.user.model.Profile;
@@ -22,6 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
+import static com.suhanlee.luckybikideffenceapiserver.currency.service.EnergyService.MAX_ENERGY_AMOUNT;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -32,6 +38,8 @@ public class UserService {
     private final GoldRepository goldRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final StatRepository statRepository;
+    private final DiamondRepository diamondRepository;
+    private final EnergyRepository energyRepository;
 
     //회원가입
     @Transactional(rollbackFor = Exception.class)
@@ -69,6 +77,16 @@ public class UserService {
         goldRepository.save(Gold.builder()
                 .userId(user.getUserId())
                 .amount(0)
+                .build());
+
+        diamondRepository.save(Diamond.builder()
+                .userId(user.getUserId())
+                .amount(0)
+                .build());
+
+        energyRepository.save(Energy.builder()
+                .userId(user.getUserId())
+                .amount(MAX_ENERGY_AMOUNT)
                 .build());
     }
 
