@@ -1,8 +1,8 @@
 spring:
   profiles:
-    active: dev
+    active: local
   config:
-      on-profile: dev
+      on-profile: local
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root

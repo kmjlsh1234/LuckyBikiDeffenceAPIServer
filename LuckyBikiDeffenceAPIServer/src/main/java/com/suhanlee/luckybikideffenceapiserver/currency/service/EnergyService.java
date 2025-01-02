@@ -70,7 +70,7 @@ public class EnergyService {
     public int useEnergy(EnergyUseParam energyUseParam){
         Energy energy = retrieveEnergy(energyUseParam.getUserId());
         if(energy.getAmount() < energyUseParam.getAmount()){
-            throw new RestException(ErrorCode.USER_NOT_FOUND);
+            throw new RestException(ErrorCode.ENERGY_NOT_ENOUGH);
         }
         energy.useAmount(energyUseParam.getAmount());
         energyRepository.save(energy);
@@ -79,6 +79,6 @@ public class EnergyService {
 
     private Energy retrieveEnergy(long userId){
         return energyRepository.findByUserId(userId)
-                .orElseThrow(() -> new RestException(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new RestException(ErrorCode.ENERGY_NOT_FOUND));
     }
 }

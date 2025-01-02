@@ -42,6 +42,6 @@ public class StatService {
 
     public Stat retrieveStat(long userId){
         return statRepository.findByUserId(userId)
-                .orElseThrow(() -> new RestException(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new RestException(ErrorCode.STAT_NOT_FOUND));
     }
 }

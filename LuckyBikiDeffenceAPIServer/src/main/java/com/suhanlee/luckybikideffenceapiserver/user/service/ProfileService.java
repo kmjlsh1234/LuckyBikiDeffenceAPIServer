@@ -38,7 +38,7 @@ public class ProfileService {
 
         //닉네임 길이 검사
         if(profileModParam.getNickname().length() < 2 || profileModParam.getNickname().length() > 15){
-            throw new RestException(ErrorCode.USER_NOT_FOUND);
+            throw new RestException(ErrorCode.INVALID_NICKNAME_LENGTH);
         }
 
         Profile profile = retrieveProfile(profileModParam.getUserId());
@@ -51,7 +51,7 @@ public class ProfileService {
     public ProfileVo addEx(ExAddParam exAddParam){
         //핵 및 파라미터 체크(너무 많은 경험치를 추가하려는 시도)
         if(exAddParam.getEx() > 10000L || exAddParam.getEx() < 0){
-            throw new RestException(ErrorCode.GOLD_NOT_FOUND);
+            throw new RestException(ErrorCode.INVALID_EX_AMOUNT);
         }
 
         Profile profile = retrieveProfile(exAddParam.getUserId());
