@@ -31,7 +31,3 @@ jobs:
     # 4. Build with Gradle (Use relative path to gradlew)
     - name: Build with Gradle
       run: ./LuckyBikiDeffenceAPIServer/gradlew clean build --no-daemon
-
-    # 5. Run tests (Optional)
-    - name: Run tests
-      run: ./LuckyBikiDeffenceAPIServer/gradlew test --no-daemon
